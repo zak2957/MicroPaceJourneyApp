@@ -129,8 +129,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                   FunctionCardWidget(
                     icon: Icons.straighten,
-                    title: '里程轉換',
-                    subtitle: '距離計算',
+                    title: '卡路里計算',
+                    subtitle: '熱量消耗',
                     color: Color(0xFFF39C12),
                     isImplemented: false,
                   ),
