@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/step_counter_widget.dart';
 import '../widgets/function_card_widget.dart';
+import 'water_tracker_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -96,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
                 childAspectRatio: 1.1,
-                children: const [
+                children:  [
                   FunctionCardWidget(
                     icon: Icons.timer,
                     title: '計時器',
@@ -109,7 +110,15 @@ class _HomePageState extends State<HomePage> {
                     title: '喝水紀錄',
                     subtitle: '補水提醒',
                     color: Color(0xFF3498DB),
-                    isImplemented: false,
+                    isImplemented: true,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const WaterTrackerPage(),
+                        ),
+                      );
+                    },
                   ),
                   FunctionCardWidget(
                     icon: Icons.music_note,
@@ -131,21 +140,21 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 32),
 
               // 底部提示
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,  // 白底
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [  // 加陰影
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),  // 陰影顏色
-                  spreadRadius: 1,  // 陰影散布
-                  blurRadius: 6,    // 模糊程度
-                  offset: const Offset(0, 3),  // 陰影偏移 (x, y)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,  // 白底
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [  // 加陰影
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),  // 陰影顏色
+                      spreadRadius: 1,  // 陰影散布
+                      blurRadius: 6,    // 模糊程度
+                      offset: const Offset(0, 3),  // 陰影偏移 (x, y)
+                    ),
+                  ],
                 ),
-              ],
-            ),
                 child: Row(
                   children: [
                     const Icon(
