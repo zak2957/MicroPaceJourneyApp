@@ -135,7 +135,15 @@ class _HomePageState extends State<HomePage> {
                     title: '節拍器',
                     subtitle: '步伐節奏',
                     color: Color(0xFF9B59B6),
-                    isImplemented: false,
+                    isImplemented: true,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const MetronomePage(), // 假設這是你的節拍器頁面
+                        ),
+                      );
+                    },
                   ),
                   FunctionCardWidget(
                     icon: Icons.straighten,
