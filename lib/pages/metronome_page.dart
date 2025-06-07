@@ -13,6 +13,7 @@ class _MetronomePageState extends State<MetronomePage> with SingleTickerProvider
   late Ticker _ticker;
   int _currentBeat = -1;
 
+  
   int _bpm = 180;
   int _beatsPerMeasure = 4;
 
