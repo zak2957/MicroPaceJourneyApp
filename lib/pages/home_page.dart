@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/step_counter_widget.dart';
 import '../widgets/function_card_widget.dart';
 import 'water_tracker_page.dart';
+import 'timer_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -103,8 +104,17 @@ class _HomePageState extends State<HomePage> {
                     title: '計時器',
                     subtitle: '運動計時',
                     color: Color(0xFFE74C3C),
-                    isImplemented: false,
+                    isImplemented: true,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => TimerPage(), // 這是你自己寫的計時器頁面
+                        ),
+                      );
+                    },
                   ),
+
                   FunctionCardWidget(
                     icon: Icons.water_drop,
                     title: '喝水紀錄',
