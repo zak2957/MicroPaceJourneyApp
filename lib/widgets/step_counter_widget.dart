@@ -10,26 +10,27 @@ class StepCounterWidget extends StatefulWidget {
   State<StepCounterWidget> createState() => _StepCounterWidgetState();
 }
 
-class _StepCounterWidgetState extends State<StepCounterWidget>
+class _StepCounterWidgetState extends State<StepCounterWidget> 
     with TickerProviderStateMixin {
   late Stream<StepCount> _stepCountStream;
   late StreamSubscription<StepCount> _stepCountSubscription;
-
+  
   int _steps = 0;
   int _todaySteps = 0;
+  int _baselineSteps = 0; // 新增：用來記錄重置時的基準步數
   String _status = '準備開始';
   bool _isListening = false;
-
+  
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
-
+  
   @override
   void initState() {
     super.initState();
     _initAnimations();
     _requestPermissions();
   }
-
+  
   void _initAnimations() {
     _pulseController = AnimationController(
       duration: const Duration(seconds: 2),
@@ -44,7 +45,7 @@ class _StepCounterWidgetState extends State<StepCounterWidget>
     ));
     _pulseController.repeat(reverse: true);
   }
-
+  
   Future<void> _requestPermissions() async {
     var status = await Permission.activityRecognition.status;
     if (!status.isGranted) {
@@ -52,7 +53,7 @@ class _StepCounterWidgetState extends State<StepCounterWidget>
     }
     _initPedometer();
   }
-
+  
   void _initPedometer() {
     try {
       _stepCountStream = Pedometer.stepCountStream;
@@ -70,28 +71,35 @@ class _StepCounterWidgetState extends State<StepCounterWidget>
       });
     }
   }
-
+  
   void _onStepCount(StepCount event) {
     setState(() {
       _steps = event.steps;
-      _todaySteps = event.steps;
+      // 修復：計算相對於基準點的步數
+      _todaySteps = event.steps - _baselineSteps;
+      // 確保步數不會是負數
+      if (_todaySteps < 0) {
+        _todaySteps = 0;
+      }
       _status = '正在記錄您的步數';
     });
   }
-
+  
   void _onStepCountError(error) {
     setState(() {
       _status = '計步器發生錯誤';
       _isListening = false;
     });
   }
-
+  
   void _resetSteps() {
     setState(() {
+      // 修復：將當前的絕對步數設為新的基準點
+      _baselineSteps = _steps;
       _todaySteps = 0;
       _status = '步數已重置';
     });
-
+    
     // 3秒後恢復正常狀態
     Timer(const Duration(seconds: 3), () {
       if (mounted) {
@@ -101,14 +109,14 @@ class _StepCounterWidgetState extends State<StepCounterWidget>
       }
     });
   }
-
+  
   @override
   void dispose() {
     _stepCountSubscription.cancel();
     _pulseController.dispose();
     super.dispose();
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -174,9 +182,9 @@ class _StepCounterWidgetState extends State<StepCounterWidget>
               ),
             ],
           ),
-
+          
           const SizedBox(height: 20),
-
+          
           // 主要步數顯示
           AnimatedBuilder(
             animation: _pulseAnimation,
@@ -225,9 +233,9 @@ class _StepCounterWidgetState extends State<StepCounterWidget>
               );
             },
           ),
-
+          
           const SizedBox(height: 20),
-
+          
           // 狀態信息
           Text(
             _status,
@@ -237,9 +245,9 @@ class _StepCounterWidgetState extends State<StepCounterWidget>
               fontWeight: FontWeight.w500,
             ),
           ),
-
+          
           const SizedBox(height: 20),
-
+          
           // 統計信息行
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -248,9 +256,9 @@ class _StepCounterWidgetState extends State<StepCounterWidget>
               _buildStatItem('消耗卡路里', '${(_todaySteps * 0.04).toStringAsFixed(0)} cal'),
             ],
           ),
-
+          
           const SizedBox(height: 20),
-
+          
           // 重置按鈕
           SizedBox(
             width: double.infinity,
@@ -279,7 +287,7 @@ class _StepCounterWidgetState extends State<StepCounterWidget>
       ),
     );
   }
-
+  
   Widget _buildStatItem(String label, String value) {
     return Column(
       children: [
